@@ -1199,8 +1199,8 @@ export default class Carousel extends Component {
             // extraData: this.state,
             renderItem: this._renderItem,
             numColumns: 1,
-            getItemLayout: undefined, // see #193
-            initialScrollIndex: undefined, // see #193
+            // getItemLayout: undefined, // see #193
+            // initialScrollIndex: undefined, // see #193
             keyExtractor: keyExtractor || this._getKeyExtractor
         } : {};
 
@@ -1220,6 +1220,17 @@ export default class Carousel extends Component {
             onTouchStart: this._onTouchStart,
             onLayout: this._onLayout,
             ...specificProps
+        };
+    }
+
+    _getItemLayout (data, index) {
+        const { itemWidth, itemHeight, vertical } = this.props;
+        const itemSize = vertical ? itemHeight : itemWidth;
+
+        return {
+            length: itemSize,
+            offset: itemSize * index,
+            index
         };
     }
 
@@ -1245,7 +1256,7 @@ export default class Carousel extends Component {
                 }
             </AnimatedScrollView>
         ) : (
-            <AnimatedFlatList {...props} />
+            <AnimatedFlatList getItemLayout={this._getItemLayout} {...props} />
         );
     }
 }
